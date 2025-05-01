@@ -1,0 +1,65 @@
+package dev.juliancamacho.neuroplay.service.impl;
+
+import dev.juliancamacho.neuroplay.dto.UsuarioDto;
+import dev.juliancamacho.neuroplay.entity.Usuario;
+import dev.juliancamacho.neuroplay.mapper.UsuarioMapper;
+import dev.juliancamacho.neuroplay.repository.UsuarioRepository;
+import dev.juliancamacho.neuroplay.service.interfaces.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class UsuarioServiceImpl implements UsuarioService {
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioMapper usuarioMapper;
+
+    // CREATE
+    @Override
+    public UsuarioDto createUsuario(UsuarioDto usuarioDto) {
+        Usuario usuario = usuarioMapper.usuarioDtoToUsuario(usuarioDto);
+        Usuario savedUsuario = usuarioRepository.save(usuario);
+        return usuarioMapper.usuarioToUsuarioDto(savedUsuario);
+    }
+
+    // SELECT BY ID
+    @Override
+    public UsuarioDto getUsuario(Integer id) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe un usuario con ese ID"));
+        return usuarioMapper.usuarioToUsuarioDto(usuario);
+    }
+
+    // SELECT ALL
+    @Override
+    public List<UsuarioDto> getAllUsuarios() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
+
+        return usuarios.stream().map(
+                usuarioMapper::usuarioToUsuarioDto).collect(Collectors.toList());
+    }
+
+    // UPDATE
+    @Override
+    public UsuarioDto updateUsuario(Integer id, UsuarioDto usuarioDto) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe un usuario con ese ID"));
+
+        usuario.setNombre(usuarioDto.getNombre());
+        usuario.setApellido(usuarioDto.getApellido());
+        usuario.setEmail(usuarioDto.getEmail());
+        usuario.setTelefono(usuarioDto.getTelefono());
+
+        Usuario updatedUsuario = usuarioRepository.save(usuario);
+
+        return usuarioMapper.usuarioToUsuarioDto(updatedUsuario);
+    }
+
+    // DELETE BY ID
+    @Override
+    public void deleteUsuarioById(Integer id) {
+        usuarioRepository.deleteById(id);
+    }
+}
