@@ -6,10 +6,12 @@ import dev.juliancamacho.neuroplay.mapper.UsuarioMapper;
 import dev.juliancamacho.neuroplay.repository.UsuarioRepository;
 import dev.juliancamacho.neuroplay.service.interfaces.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired

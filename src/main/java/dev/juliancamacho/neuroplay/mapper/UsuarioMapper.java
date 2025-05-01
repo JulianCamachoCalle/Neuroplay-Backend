@@ -3,6 +3,7 @@ package dev.juliancamacho.neuroplay.mapper;
 import dev.juliancamacho.neuroplay.dto.UsuarioDto;
 import dev.juliancamacho.neuroplay.entity.Usuario;
 import org.mapstruct.Mapper;
+import org.mapstruct.MapperConfig;
 
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
