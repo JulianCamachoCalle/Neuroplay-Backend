@@ -4,7 +4,9 @@ import dev.juliancamacho.neuroplay.dto.PacientesDto;
 import dev.juliancamacho.neuroplay.entity.Pacientes;
 import dev.juliancamacho.neuroplay.mapper.PacientesMapper;
 import dev.juliancamacho.neuroplay.repository.PacientesRepository;
+import dev.juliancamacho.neuroplay.repository.UsuarioRepository;
 import dev.juliancamacho.neuroplay.service.interfaces.PacientesService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PacientesServiceImpl implements PacientesService {
 
     @Autowired
@@ -49,10 +52,11 @@ public class PacientesServiceImpl implements PacientesService {
     public PacientesDto updatePacientes(Integer id, PacientesDto pacientesDto) {
         Pacientes pacientes = pacientesRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe un pacientes con ese ID"));
 
+        pacientes.setFechaAcv(pacientesDto.getFechaAcv());
         pacientes.setTipoAcv(pacientesDto.getTipoAcv());
         pacientes.setAntecedentes(pacientesDto.getAntecedentes());
         pacientes.setMedicacionActual(pacientesDto.getMedicacionActual());
-        pacientes.setProgresoActual(pacientesDto.getProgresoActual());
+        pacientes.setProgresoTotal(pacientesDto.getProgresoTotal());
         pacientes.setEjerciciosCompletados(pacientesDto.getEjerciciosCompletados());
         pacientes.setDiasConsecutivos(pacientesDto.getDiasConsecutivos());
 

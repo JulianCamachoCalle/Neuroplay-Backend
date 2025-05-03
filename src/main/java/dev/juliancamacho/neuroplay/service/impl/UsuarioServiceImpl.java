@@ -1,8 +1,12 @@
 package dev.juliancamacho.neuroplay.service.impl;
 
 import dev.juliancamacho.neuroplay.dto.UsuarioDto;
+import dev.juliancamacho.neuroplay.entity.Pacientes;
+import dev.juliancamacho.neuroplay.entity.Terapeutas;
 import dev.juliancamacho.neuroplay.entity.Usuario;
+import dev.juliancamacho.neuroplay.enums.TipoUsuario;
 import dev.juliancamacho.neuroplay.mapper.UsuarioMapper;
+import dev.juliancamacho.neuroplay.repository.TerapeutasRepository;
 import dev.juliancamacho.neuroplay.repository.UsuarioRepository;
 import dev.juliancamacho.neuroplay.service.interfaces.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +24,26 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
+    @Autowired
+    private TerapeutasRepository terapeutasRepository;
+
     // CREATE
     @Override
     public UsuarioDto createUsuario(UsuarioDto usuarioDto) {
         Usuario usuario = usuarioMapper.usuarioDtoToUsuario(usuarioDto);
+
+        if (usuario.getTipo() == TipoUsuario.terapeuta) {
+            Terapeutas terapeuta = new Terapeutas();
+
+            usuario.setTerapeuta(terapeuta);
+            terapeuta.setUsuario(usuario);
+        } else if (usuario.getTipo() == TipoUsuario.paciente) {
+            Pacientes paciente = new Pacientes();
+
+            usuario.setPaciente(paciente);
+            paciente.setUsuario(usuario);
+        }
+
         Usuario savedUsuario = usuarioRepository.save(usuario);
         return usuarioMapper.usuarioToUsuarioDto(savedUsuario);
     }

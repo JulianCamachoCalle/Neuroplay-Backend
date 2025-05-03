@@ -4,7 +4,8 @@ import dev.juliancamacho.neuroplay.enums.TipoAcv;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -12,11 +13,12 @@ import java.util.Date;
 public class Pacientes
 {
     @Id
-    @Column(name = "usuario_id")
-    private Integer usuarioId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_paciente")
+    private Integer idPaciente;
 
     @Column(name = "fecha_acv")
-    private Date fechaAcv;
+    private LocalDate fechaAcv;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_acv")
@@ -27,21 +29,19 @@ public class Pacientes
     @Column(name = "medicacion_actual")
     private String medicacionActual;
 
-    @Column(name = "progreso_actual")
-    private Double progresoActual;
+    @Column(name = "progreso_total", precision = 5, scale = 2, columnDefinition = "DECIMAL(5,2) DEFAULT 0.00")
+    private BigDecimal progresoTotal;
 
-    @Column(name = "ejercicios_completados")
+    @Column(name = "ejercicios_completados", columnDefinition = "INT DEFAULT 0")
     private Integer ejerciciosCompletados;
 
-    @Column(name = "dias_consecutivos")
+    @Column(name = "dias_consecutivos", columnDefinition = "INT DEFAULT 0")
     private Integer diasConsecutivos;
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "paciente")
     private Usuario usuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "terapeuta_id", referencedColumnName = "usuario_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "fk_id_terapeuta", nullable = false)
     private Terapeutas terapeuta;
 }
