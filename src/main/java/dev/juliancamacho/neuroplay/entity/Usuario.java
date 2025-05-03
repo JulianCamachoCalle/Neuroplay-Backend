@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,16 +27,16 @@ public class Usuario {
     @Column(nullable = false)
     private TipoUsuario tipo;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String apellido;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -46,18 +48,35 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private Genero genero;
 
-    @Column(length = 20)
     private String telefono;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha_registro;
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'default.png'")
     private String avatar;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('activo', 'inactivo') DEFAULT 'activo'")
     private EstadoUsuario estado;
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Terapeutas terapeuta;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Pacientes paciente;
+
+    // VALIDACION DE USUARIOS
+    public void setTerapeuta(Terapeutas terapeuta) {
+        if (terapeuta != null && this.paciente != null) {
+            throw new IllegalStateException("Un usuario no puede ser terapeuta y paciente");
+        }
+        this.terapeuta = terapeuta;
+    }
+
+    public void setPaciente(Pacientes paciente) {
+        if (paciente != null && this.paciente != null) {
+            throw new IllegalStateException("Un usuario no puede ser paciente y terapeuta");
+        }
+        this.paciente = paciente;
+    }
 }
