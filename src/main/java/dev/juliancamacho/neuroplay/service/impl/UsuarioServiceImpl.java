@@ -49,10 +49,17 @@ public class UsuarioServiceImpl implements UsuarioService {
     public UsuarioDto updateUsuario(Integer id, UsuarioDto usuarioDto) {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("No existe un usuario con ese ID"));
 
+        usuario.setTipo(usuarioDto.getTipo());
         usuario.setNombre(usuarioDto.getNombre());
         usuario.setApellido(usuarioDto.getApellido());
+        usuario.setUsername(usuarioDto.getUsername());
         usuario.setEmail(usuarioDto.getEmail());
+        usuario.setPassword(usuarioDto.getPassword());
+        usuario.setFecha_nacimiento(usuarioDto.getFecha_nacimiento());
+        usuario.setGenero(usuarioDto.getGenero());
         usuario.setTelefono(usuarioDto.getTelefono());
+        usuario.setAvatar(usuarioDto.getAvatar());
+        usuario.setEstado(usuarioDto.getEstado());
 
         Usuario updatedUsuario = usuarioRepository.save(usuario);
 
