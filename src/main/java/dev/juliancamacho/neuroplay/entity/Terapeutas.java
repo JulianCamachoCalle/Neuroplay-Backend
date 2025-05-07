@@ -22,9 +22,4 @@ public class Terapeutas {
 
     private String biografia;
 
-    @OneToOne(mappedBy = "terapeuta")
-    private Usuario usuario;
-
-    @OneToMany(mappedBy = "terapeuta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pacientes> pacientes;
 }

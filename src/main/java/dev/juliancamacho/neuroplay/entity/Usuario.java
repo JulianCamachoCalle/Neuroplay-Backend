@@ -2,13 +2,18 @@ package dev.juliancamacho.neuroplay.entity;
 
 import dev.juliancamacho.neuroplay.enums.EstadoUsuario;
 import dev.juliancamacho.neuroplay.enums.Genero;
-import dev.juliancamacho.neuroplay.enums.TipoUsuario;
+import dev.juliancamacho.neuroplay.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,7 +21,7 @@ import java.time.LocalDateTime;
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +29,7 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoUsuario tipo;
+    private Role rol;
 
     @Column(nullable = false)
     private String nombre;
@@ -32,11 +37,8 @@ public class Usuario {
     @Column(nullable = false)
     private String apellido;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String username;
-
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -53,17 +55,34 @@ public class Usuario {
     @CreationTimestamp
     private LocalDateTime fecha_registro;
 
-    @Column(columnDefinition = "varchar(255) default default.png")
+    @Column(length = 255)
     private String avatar;
 
     @Enumerated(EnumType.STRING)
-    private EstadoUsuario estado;
+    private EstadoUsuario estado = EstadoUsuario.ACTIVO;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_terapeuta", referencedColumnName = "id_terapeuta")
-    private Terapeutas terapeuta;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(rol.name()));
+    }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_id_paciente", referencedColumnName = "id_paciente")
-    private Pacientes paciente;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

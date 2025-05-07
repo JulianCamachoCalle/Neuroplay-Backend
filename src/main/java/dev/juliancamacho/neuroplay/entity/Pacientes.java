@@ -38,10 +38,4 @@ public class Pacientes
     @Column(name = "dias_consecutivos", columnDefinition = "INT DEFAULT 0")
     private Integer diasConsecutivos;
 
-    @OneToOne(mappedBy = "paciente")
-    private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "fk_id_terapeuta", nullable = false)
-    private Terapeutas terapeuta;
 }
