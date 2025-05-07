@@ -2,13 +2,17 @@ package dev.juliancamacho.neuroplay.entity;
 
 import dev.juliancamacho.neuroplay.enums.EstadoUsuario;
 import dev.juliancamacho.neuroplay.enums.Genero;
-import dev.juliancamacho.neuroplay.enums.TipoUsuario;
+import dev.juliancamacho.neuroplay.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -17,7 +21,7 @@ import java.util.List;
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +29,7 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoUsuario tipo;
+    private Role rol;
 
     @Column(nullable = false)
     private String nombre;
@@ -33,50 +37,52 @@ public class Usuario {
     @Column(nullable = false)
     private String apellido;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String username;
-
-    @Column(nullable = false, unique = true)
-    private String email;
 
     @Column(nullable = false)
     private String password;
 
     @Temporal(TemporalType.DATE)
-    private Date fecha_nacimiento;
+    private LocalDate fecha_nacimiento;
 
     @Enumerated(EnumType.STRING)
     private Genero genero;
 
+    @Column(nullable = false, length = 9)
     private String telefono;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha_registro;
+    private LocalDateTime fecha_registro;
 
+    @Column(length = 255)
     private String avatar;
 
     @Enumerated(EnumType.STRING)
-    private EstadoUsuario estado;
+    private EstadoUsuario estado = EstadoUsuario.ACTIVO;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Terapeutas terapeuta;
-
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Pacientes paciente;
-
-    // VALIDACION DE USUARIOS
-    public void setTerapeuta(Terapeutas terapeuta) {
-        if (terapeuta != null && this.paciente != null) {
-            throw new IllegalStateException("Un usuario no puede ser terapeuta y paciente");
-        }
-        this.terapeuta = terapeuta;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(rol.name()));
     }
 
-    public void setPaciente(Pacientes paciente) {
-        if (paciente != null && this.paciente != null) {
-            throw new IllegalStateException("Un usuario no puede ser paciente y terapeuta");
-        }
-        this.paciente = paciente;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -11,20 +11,15 @@ import java.util.List;
 public class Terapeutas {
 
     @Id
-    @Column(name = "usuario_id")
-    private Integer usuarioId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_terapeuta")
+    private Integer idTerapeuta;
 
+    @Column(length = 100)
     private String especialidad;
 
     private String licencia;
 
     private String biografia;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario;
-
-    @OneToMany(mappedBy = "terapeuta")
-    private List<Pacientes> pacientes;
 }

@@ -1,6 +1,6 @@
 package dev.juliancamacho.neuroplay.enums;
 
-public enum EstadoUsuario
+public enum Role
 {
-    ACTIVO, INACTIVO
+    PACIENTE, TERAPEUTA, ADMIN
 }

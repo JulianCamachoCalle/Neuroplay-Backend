@@ -20,4 +20,8 @@ public interface UsuarioService {
 
     // DELETE BY ID
     void deleteUsuarioById(Integer id);
+
+    boolean checkUsernameExists(String username);
+
+    boolean checkTelefonoExists(String telefono);
 }

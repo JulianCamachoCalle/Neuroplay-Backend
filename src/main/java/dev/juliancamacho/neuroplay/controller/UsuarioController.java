@@ -2,6 +2,7 @@ package dev.juliancamacho.neuroplay.controller;
 
 import dev.juliancamacho.neuroplay.dto.UsuarioDto;
 import dev.juliancamacho.neuroplay.service.interfaces.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/usuario")
+@RequestMapping("/api/v1/usuario")
+@RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class UsuarioController
 {
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
     // CREATE
     @PostMapping()
@@ -43,8 +45,23 @@ public class UsuarioController
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUsuario(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteUsuario(@PathVariable Integer id) {
         usuarioService.deleteUsuarioById(id);
-        return new ResponseEntity<>("Usuario eliminado con exito!", HttpStatus.OK);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    // VERIFICAR USERNAME
+    @GetMapping("/check-username/{username}")
+    public ResponseEntity<Boolean> checkEmail(@PathVariable String username) {
+        boolean exists = usuarioService.checkUsernameExists(username);
+        return ResponseEntity.ok(exists);
+    }
+
+    // VERIFICAR TELEFONO
+    @GetMapping("/check-telefono/{telefono}")
+    public ResponseEntity<Boolean> checkTelefono(@PathVariable String telefono) {
+        boolean exists = usuarioService.checkTelefonoExists(telefono);
+        return ResponseEntity.ok(exists);
     }
 }

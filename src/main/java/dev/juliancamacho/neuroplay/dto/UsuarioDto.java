@@ -2,26 +2,25 @@ package dev.juliancamacho.neuroplay.dto;
 
 import dev.juliancamacho.neuroplay.enums.EstadoUsuario;
 import dev.juliancamacho.neuroplay.enums.Genero;
-import dev.juliancamacho.neuroplay.enums.TipoUsuario;
+import dev.juliancamacho.neuroplay.enums.Role;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class UsuarioDto {
 
     private Integer id;
-    private TipoUsuario tipo;
     private String nombre;
     private String apellido;
     private String username;
-    private String email;
     private String password;
-    private Date fecha_nacimiento;
+    private LocalDate fecha_nacimiento;
     private Genero genero;
     private String telefono;
-    private Date fecha_registro;
+    private LocalDateTime fecha_registro;
     private String avatar;
     private EstadoUsuario estado;
-
+    private Role rol;
 }

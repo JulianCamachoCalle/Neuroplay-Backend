@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class TerapeutasDto {
 
-    private Integer usuarioId;
+    private Integer idTerapeuta;
     private String especialidad;
     private String licencia;
     private String biografia;
