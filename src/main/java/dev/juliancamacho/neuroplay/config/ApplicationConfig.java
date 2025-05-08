@@ -1,6 +1,6 @@
 package dev.juliancamacho.neuroplay.config;
 
-import dev.juliancamacho.neuroplay.repository.UsuarioRepository;
+import dev.juliancamacho.neuroplay.controlador.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
