@@ -33,7 +33,6 @@ public class JwtService {
                 .claim("nombre", usuario.getNombre())
                 .claim("apellido", usuario.getApellido())
                 .claim("telefono", usuario.getTelefono())
-                .claim("fecha_registro", usuario.getFechaRegistro())
                 .claim("genero", usuario.getGenero())
                 .claim("estado", usuario.getEstado())
                 .claim("rol", usuario.getRol())

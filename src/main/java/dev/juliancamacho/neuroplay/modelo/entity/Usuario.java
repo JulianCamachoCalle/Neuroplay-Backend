@@ -1,10 +1,14 @@
 package dev.juliancamacho.neuroplay.modelo.entity;
 
+import dev.juliancamacho.neuroplay.controlador.auth.password.ForgotPassword;
 import dev.juliancamacho.neuroplay.modelo.enums.EstadoUsuario;
 import dev.juliancamacho.neuroplay.modelo.enums.Genero;
 import dev.juliancamacho.neuroplay.modelo.enums.Role;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +22,9 @@ import java.util.List;
 
 @Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "usuarios", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
@@ -29,7 +36,6 @@ public class Usuario implements UserDetails {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Role rol;
 
     @Column(nullable = false)
@@ -62,6 +68,9 @@ public class Usuario implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private EstadoUsuario estado = EstadoUsuario.ACTIVO;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private ForgotPassword forgotPassword;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

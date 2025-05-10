@@ -7,6 +7,7 @@ import dev.juliancamacho.neuroplay.controlador.repository.TerapeutasRepository;
 import dev.juliancamacho.neuroplay.controlador.repository.UsuarioRepository;
 import dev.juliancamacho.neuroplay.controlador.service.interfaces.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +19,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapper usuarioMapper;
-    private final TerapeutasRepository terapeutasRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // CREATE
     @Override
     public UsuarioDto createUsuario(UsuarioDto usuarioDto) {
         Usuario usuario = usuarioMapper.usuarioDtoToUsuario(usuarioDto);
+
+        usuario.setPassword(passwordEncoder.encode(usuarioDto.getPassword()));
 
 //        if (usuario.getTipo() == TipoUsuario.TERAPEUTA) {
 //            Terapeutas terapeuta = new Terapeutas();
@@ -48,7 +51,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioMapper.usuarioToUsuarioDto(usuario);
     }
 
-    // SELECT ALL
+    // SELECT ALLww
     @Override
     public List<UsuarioDto> getAllUsuarios() {
         List<Usuario> usuarios = usuarioRepository.findAll();

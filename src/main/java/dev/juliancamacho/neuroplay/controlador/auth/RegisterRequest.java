@@ -1,11 +1,12 @@
 package dev.juliancamacho.neuroplay.controlador.auth;
 
+import dev.juliancamacho.neuroplay.modelo.enums.Genero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ public class RegisterRequest {
     private String apellido;
     private String username;
     private String password;
-    private LocalDate fecha_nacimiento;
-    private dev.juliancamacho.neuroplay.modelo.enums.Genero genero;
+    private Date fechaNacimiento;
+    private Genero genero;
     private String telefono;
 }
