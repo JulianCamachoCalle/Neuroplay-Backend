@@ -1,13 +1,11 @@
 package dev.juliancamacho.neuroplay.config;
 
-import dev.juliancamacho.neuroplay.jwt.JwtAuthenticationFilter;
+import dev.juliancamacho.neuroplay.controlador.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,7 +41,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .requestMatchers(HttpMethod.GET).permitAll()
                                 .requestMatchers(HttpMethod.POST).permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/auth/login").permitAll()
+                                .requestMatchers("/auth/register").permitAll()
                                 .requestMatchers("/api/v1/**").permitAll()
                                 .requestMatchers("/forgotPassword/**").permitAll()
                                 .anyRequest().authenticated()
