@@ -2,49 +2,68 @@ package dev.juliancamacho.neuroplay.controlador.controller;
 
 import dev.juliancamacho.neuroplay.modelo.dto.PacientesDto;
 import dev.juliancamacho.neuroplay.controlador.service.interfaces.PacientesService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/pacientes")
+@RequiredArgsConstructor
 public class PacientesController {
 
-    @Autowired
-    private PacientesService pacientesService;
+    private final PacientesService pacientesService;
 
     // CREATE
-    @PostMapping()
-    public ResponseEntity<PacientesDto> createPacientes(@RequestBody PacientesDto pacientesDto) {
-        return new ResponseEntity<>(pacientesService.createPacientes(pacientesDto), HttpStatus.CREATED);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public PacientesDto createPacientes(@RequestBody PacientesDto pacientesDto) {
+        return pacientesService.createPacientes(pacientesDto);
     }
 
-    // SELECT BY ID
+    // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<PacientesDto> getPacientes(@PathVariable Integer id) {
-        return new ResponseEntity<>(pacientesService.getPacientes(id), HttpStatus.OK);
+    public PacientesDto getPacienteById(@PathVariable Integer id) {
+        return pacientesService.getPacientes(id);
     }
 
-    // SELECT ALL
-    @GetMapping()
-    public ResponseEntity<List<PacientesDto>> getPacientess() {
-        List<PacientesDto> pacientess = pacientesService.getAllPacientes();
-        return new ResponseEntity<>(pacientess, HttpStatus.OK);
+    // GET PACIENTE BY USUARIO
+    @GetMapping("/usuario/{usuarioId}")
+    public PacientesDto getPacienteByUsuarioId(@PathVariable Integer usuarioId) {
+        return pacientesService.getPacienteByUsuarioId(usuarioId);
+    }
+
+    // GET ALL
+    @GetMapping
+    public List<PacientesDto> getAllPacientes() {
+        return pacientesService.getAllPacientes();
+    }
+
+    // GET PACIENTE BY TERAPEUTA
+    @GetMapping("/terapeuta/{terapeutaId}")
+    public List<PacientesDto> getPacientesByTerapeuta(@PathVariable Integer terapeutaId) {
+        return pacientesService.getPacientesByTerapeuta(terapeutaId);
     }
 
     // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<PacientesDto> updatePacientes(@PathVariable Integer id, @RequestBody PacientesDto pacientesDto) {
-        return new ResponseEntity<>(pacientesService.updatePacientes(id, pacientesDto), HttpStatus.OK);
+    public PacientesDto updatePaciente(@PathVariable Integer id, @RequestBody PacientesDto pacientesDto) {
+        return pacientesService.updatePacientes(id, pacientesDto);
+    }
+
+    // UPDATE PROGRESO
+    @PatchMapping("/{id}/progreso")
+    public PacientesDto updateProgreso(@PathVariable Integer id,
+                                       @RequestParam BigDecimal progreso) {
+        return pacientesService.updateProgresoPaciente(id, progreso);
     }
 
     // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePacientes(@PathVariable Integer id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletePaciente(@PathVariable Integer id) {
         pacientesService.deletePacientesById(id);
-        return new ResponseEntity<>("Pacientes eliminado con exito!", HttpStatus.OK);
     }
 }

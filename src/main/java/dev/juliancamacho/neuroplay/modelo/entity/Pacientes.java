@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Entity
@@ -13,12 +13,10 @@ import java.time.LocalDate;
 public class Pacientes
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_paciente")
-    private Integer idPaciente;
+    private Integer id;
 
     @Column(name = "fecha_acv")
-    private LocalDate fechaAcv;
+    private Date fechaAcv;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_acv")
@@ -29,13 +27,24 @@ public class Pacientes
     @Column(name = "medicacion_actual")
     private String medicacionActual;
 
-    @Column(name = "progreso_total", precision = 5, scale = 2, columnDefinition = "DECIMAL(5,2) DEFAULT 0.00")
-    private BigDecimal progresoTotal;
+    @Column(name = "progreso_total", precision = 5, scale = 2)
+    private BigDecimal progresoTotal = BigDecimal.ZERO;
 
-    @Column(name = "ejercicios_completados", columnDefinition = "INT DEFAULT 0")
-    private Integer ejerciciosCompletados;
+    @Column(name = "ejercicios_completados")
+    private Integer ejerciciosCompletados = 0;
 
-    @Column(name = "dias_consecutivos", columnDefinition = "INT DEFAULT 0")
-    private Integer diasConsecutivos;
+    @Column(name = "dias_consecutivos")
+    private Integer diasConsecutivos = 0;
+
+    // Relación One-to-One con Usuario (dueño de la relación)
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    // Relación Many-to-One con Terapeuta (muchos pacientes pueden tener un terapeuta)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "terapeuta_id", nullable = false)
+    private Terapeutas terapeuta;
 
 }
