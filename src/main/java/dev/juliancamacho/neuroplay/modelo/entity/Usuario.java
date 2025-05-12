@@ -72,6 +72,18 @@ public class Usuario implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
     private ForgotPassword forgotPassword;
 
+    // Relación One-to-One con Terapeuta (si el usuario es terapeuta)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Terapeutas terapeutaInfo;
+
+    // Relación One-to-One con Paciente (si el usuario es paciente)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Pacientes pacienteInfo;
+
+    public String getNombreCompleto() {
+        return this.nombre + " " + this.apellido;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(rol.name()));

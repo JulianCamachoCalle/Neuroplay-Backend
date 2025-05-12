@@ -4,13 +4,16 @@ import dev.juliancamacho.neuroplay.modelo.enums.TipoAcv;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class PacientesDto {
 
-    private Integer idPaciente;
-    private LocalDate fechaAcv;
+    private Integer id;
+    private UsuarioDto usuario; // Datos del usuario
+    private Integer terapeutaId; // Id de terapeuta
+    private String terapeutaNombre;
+    private Date fechaAcv;
     private TipoAcv tipoAcv;
     private String antecedentes;
     private String medicacionActual;
