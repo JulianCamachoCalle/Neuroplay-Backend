@@ -11,6 +11,7 @@ public class PacientesDto {
 
     private Integer id;
     private UsuarioDto usuario; // Datos del usuario
+    private Integer usuarioId; // Id de usuario
     private Integer terapeutaId; // Id de terapeuta
     private String terapeutaNombre;
     private Date fechaAcv;

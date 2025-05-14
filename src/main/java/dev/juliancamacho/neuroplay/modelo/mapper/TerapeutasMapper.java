@@ -10,8 +10,6 @@ public interface TerapeutasMapper {
 
     // Mapeo de Entidad -> DTO
     @Mapping(target = "usuario", source = "usuario")
-    @Mapping(target = "pacientesIds", expression = "java(terapeutas.getPacientes().stream().map(p -> p.getId()).collect(java.util.stream.Collectors.toList()))")
-    @Mapping(target = "cantidadPacientes", expression = "java(terapeutas.getPacientes().size())")
     TerapeutasDto terapeutasToTerapeutasDto(Terapeutas terapeutas);
 
     // Mapeo de DTO -> Entidad

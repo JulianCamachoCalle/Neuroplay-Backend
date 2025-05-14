@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,18 +35,13 @@ public class TerapeutasServiceImpl implements TerapeutasService {
     // CREATE
     @Override
     public TerapeutasDto createTerapeutas(TerapeutasDto terapeutasDto) {
-        // Validar que el usuario existe y no es ya terapeuta
-        Usuario usuario = usuarioRepository.findById(terapeutasDto.getUsuario().getId())
+        // Get ID from either the nested usuario object or direct field
+        Integer usuarioId = terapeutasDto.getUsuario() != null ?
+                terapeutasDto.getUsuario().getId() :
+                terapeutasDto.getUsuarioId();
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-
-        if (terapeutasRepository.existsByUsuarioId(usuario.getId())) {
-            throw new IllegalStateException("Este usuario ya está registrado como terapeuta");
-        }
-
-        // Validar que la licencia es única
-        if (terapeutasRepository.existsByLicencia(terapeutasDto.getLicencia())) {
-            throw new IllegalStateException("La licencia profesional ya está registrada");
-        }
 
         Terapeutas terapeuta = terapeutasMapper.terapeutasDtoToTerapeutas(terapeutasDto);
         terapeuta.setUsuario(usuario);
@@ -128,11 +124,15 @@ public class TerapeutasServiceImpl implements TerapeutasService {
     // Métodos auxiliares privados
     private TerapeutasDto buildCompleteTerapeutaDto(Terapeutas terapeuta) {
         TerapeutasDto dto = terapeutasMapper.terapeutasToTerapeutasDto(terapeuta);
-        dto.setUsuario(usuarioMapper.usuarioToUsuarioDto(terapeuta.getUsuario()));
 
-        // Calcula la cantidad de pacientes
-        int cantidad = terapeuta.getPacientes() != null ? terapeuta.getPacientes().size() : 0;
-        dto.setCantidadPacientes(cantidad);
+        // Handle null pacientes
+        if (terapeuta.getPacientes() != null) {
+            dto.setPacientes(terapeuta.getPacientes().stream()
+                    .map(pacientesMapper::pacientesToPacientesDto)
+                    .collect(Collectors.toList()));
+        } else {
+            dto.setPacientes(Collections.emptyList());
+        }
 
         return dto;
     }

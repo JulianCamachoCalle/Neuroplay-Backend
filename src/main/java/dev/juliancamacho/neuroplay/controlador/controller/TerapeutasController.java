@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/terapeutas")
+@RequestMapping("/api/v1/terapeutas")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class TerapeutasController {
 
     private final TerapeutasService terapeutasService;

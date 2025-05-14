@@ -34,19 +34,24 @@ public class PacientesServiceImpl implements PacientesService {
     // CREATE
     @Override
     public PacientesDto createPacientes(PacientesDto pacientesDto) {
-        // Validar que el usuario existe y no es ya paciente
-        Usuario usuario = usuarioRepository.findById(pacientesDto.getUsuario().getId())
+        // Get ID from usuario
+        Integer usuarioId = pacientesDto.getUsuario() != null ?
+                pacientesDto.getUsuario().getId() :
+                pacientesDto.getUsuarioId();
+
+        Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-        if (pacientesRepository.existsByUsuarioId(usuario.getId())) {
-            throw new IllegalStateException("Este usuario ya está registrado como paciente");
-        }
+        // Get ID from terapeuta
+        Integer terapeutaId = pacientesDto.getUsuario() != null ?
+                pacientesDto.getUsuario().getId() :
+                pacientesDto.getTerapeutaId();
 
-        // Validar que el terapeuta existe
-        Terapeutas terapeuta = terapeutasRepository.findById(pacientesDto.getTerapeutaId())
+        Terapeutas terapeuta = terapeutasRepository.findById(terapeutaId)
                 .orElseThrow(() -> new EntityNotFoundException("Terapeuta no encontrado"));
 
         Pacientes paciente = pacientesMapper.pacientesDtoToPacientes(pacientesDto);
+
         paciente.setUsuario(usuario);
         paciente.setTerapeuta(terapeuta);
 
