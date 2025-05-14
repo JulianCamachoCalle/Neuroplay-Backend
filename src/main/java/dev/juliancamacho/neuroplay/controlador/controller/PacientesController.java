@@ -10,8 +10,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/pacientes")
+@RequestMapping("/api/v1/pacientes")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class PacientesController {
 
     private final PacientesService pacientesService;
