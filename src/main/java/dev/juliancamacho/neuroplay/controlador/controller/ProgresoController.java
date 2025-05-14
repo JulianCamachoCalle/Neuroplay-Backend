@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/progreso")
+@RequestMapping("/api/v1/progreso")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class ProgresoController {
 
     private final ProgresoService progresoService;
