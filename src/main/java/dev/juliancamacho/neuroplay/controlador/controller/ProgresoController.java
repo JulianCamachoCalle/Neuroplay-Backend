@@ -23,6 +23,11 @@ public class ProgresoController {
         return progresoService.registrarProgreso(progresoDto);
     }
 
+    @GetMapping
+    public List<ProgresoDto> listarProgresos() {
+        return progresoService.getAllProgresos();
+    }
+
     @GetMapping("/{id}")
     public ProgresoDto getProgresoById(@PathVariable Integer id) {
         return progresoService.getProgresoById(id);

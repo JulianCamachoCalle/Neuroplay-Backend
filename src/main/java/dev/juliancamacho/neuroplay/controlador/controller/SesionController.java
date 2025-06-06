@@ -22,6 +22,11 @@ public class SesionController {
         return sesionService.registrarSesion(sesionDto);
     }
 
+    @GetMapping
+    public List<SesionDto> getAllSesiones() {
+        return sesionService.getAllSesiones();
+    }
+
     @GetMapping("/{id}")
     public SesionDto getSesionById(@PathVariable Integer id) {
         return sesionService.getSesionById(id);

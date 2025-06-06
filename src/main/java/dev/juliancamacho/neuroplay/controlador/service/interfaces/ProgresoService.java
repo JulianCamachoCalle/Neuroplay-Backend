@@ -8,6 +8,7 @@ import java.util.Map;
 public interface ProgresoService {
     // Registro y consulta
     ProgresoDto registrarProgreso(ProgresoDto progresoDto);
+    List<ProgresoDto> getAllProgresos();
     ProgresoDto getProgresoById(Integer id);
     List<ProgresoDto> getProgresoByPaciente(Integer pacienteId);
     ProgresoDto actualizarProgreso(Integer id, ProgresoDto progresoDto);

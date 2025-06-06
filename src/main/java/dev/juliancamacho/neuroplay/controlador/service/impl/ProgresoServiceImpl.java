@@ -39,6 +39,11 @@ public class ProgresoServiceImpl implements ProgresoService {
     }
 
     @Override
+    public List<ProgresoDto> getAllProgresos() {
+        return progresoRepository.findAll().stream().map(progresoMapper::progresoToProgresoDto).collect(Collectors.toList());
+    }
+
+    @Override
     public ProgresoDto getProgresoById(Integer id) {
         Progreso progreso = progresoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Registro de progreso no encontrado"));
