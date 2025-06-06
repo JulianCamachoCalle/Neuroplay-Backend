@@ -21,6 +21,11 @@ public class EjercicioController {
     public EjerciciosDto createEjercicio(@RequestBody EjerciciosDto ejercicioDto) {
         return ejercicioService.createEjercicio(ejercicioDto);
     }
+    
+    @GetMapping
+    public List<EjerciciosDto> getAllEjercicios() {
+        return ejercicioService.getAllEjercicios();
+    }
 
     @GetMapping("/{id}")
     public EjerciciosDto getEjercicioById(@PathVariable Integer id) {

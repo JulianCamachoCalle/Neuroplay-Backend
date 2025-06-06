@@ -39,6 +39,11 @@ public class EjercicioServiceImpl implements EjercicioService {
     }
 
     @Override
+    public List<EjerciciosDto> getAllEjercicios() {
+        return ejercicioRepository.findAll().stream().map(ejercicioMapper::ejercicioToEjercicioDto).collect(Collectors.toList());
+    }
+
+    @Override
     public EjerciciosDto getEjercicioById(Integer id) {
         Ejercicios ejercicio = ejercicioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Ejercicio no encontrado"));
