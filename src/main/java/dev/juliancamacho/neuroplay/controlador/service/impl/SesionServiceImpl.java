@@ -42,6 +42,11 @@ public class SesionServiceImpl implements SesionService {
         Sesion savedSesion = sesionRepository.save(sesion);
         return sesionMapper.sesionToSesionDto(savedSesion);
     }
+    
+    @Override
+    public List<SesionDto> getAllSesiones() {
+        return sesionRepository.findAll().stream().map(sesionMapper::sesionToSesionDto).collect(Collectors.toList());
+    }
 
     @Override
     public SesionDto getSesionById(Integer id) {

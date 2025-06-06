@@ -7,6 +7,7 @@ import java.util.List;
 public interface SesionService {
     // Registro y gestión
     SesionDto registrarSesion(SesionDto sesionDto);
+    List<SesionDto> getAllSesiones();
     SesionDto getSesionById(Integer id);
     List<SesionDto> getSesionesByPaciente(Integer pacienteId);
     SesionDto actualizarSesion(Integer id, SesionDto sesionDto);

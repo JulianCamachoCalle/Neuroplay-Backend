@@ -13,10 +13,7 @@ public interface EjercicioMapper {
     @Mapping(target = "terapiaNombre", source = "terapia.nombre")
     EjerciciosDto ejercicioToEjercicioDto(Ejercicios ejercicio);
 
+    @Mapping(target = "id", ignore = true) // Ignorar el ID en la creación
     @Mapping(target = "terapia", ignore = true)
     Ejercicios ejercicioDtoToEjercicio(EjerciciosDto ejercicioDto);
-
-    // Opción 1: Si EjercicioResumenDto tiene terapiaId
-    @Mapping(target = "terapiaId", source = "terapia.id")
-    EjercicioResumenDto ejercicioToEjercicioResumenDto(Ejercicios ejercicio);
 }
