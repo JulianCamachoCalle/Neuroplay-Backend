@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,26 @@ import java.util.Map;
 public class ProgresoController {
 
     private final ProgresoService progresoService;
+
+    @PostMapping("/terapia")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProgresoDto registrarProgresoTerapia(
+            @RequestParam Integer pacienteId,
+            @RequestParam BigDecimal detalle,
+            @RequestParam(required = false) String notas) {
+        return progresoService.registrarProgresoTerapia(pacienteId, detalle, notas);
+    }
+
+    @PostMapping("/sesion-completada")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProgresoDto registrarSesionCompletada(@RequestParam Integer pacienteId) {
+        return progresoService.registrarSesionCompletada(pacienteId);
+    }
+
+    @GetMapping("/terapia")
+    public List<ProgresoDto> getProgresoByTerapia(@RequestParam Integer pacienteId) {
+        return progresoService.getProgresoByTerapia(pacienteId);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

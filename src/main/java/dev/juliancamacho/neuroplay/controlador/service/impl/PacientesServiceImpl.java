@@ -129,11 +129,21 @@ public class PacientesServiceImpl implements PacientesService {
 
     // UPDATE PROGRESO PACIENTE
     @Override
-    public PacientesDto updateProgresoPaciente(Integer id, BigDecimal nuevoProgreso) {
+    public PacientesDto updateProgresoPaciente(Integer id, BigDecimal progresoTotal,
+                                               Integer ejerciciosCompletados,
+                                               Integer diasConsecutivos) {
         Pacientes paciente = pacientesRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Paciente no encontrado"));
 
-        updateProgreso(paciente, nuevoProgreso);
+        if (progresoTotal != null) {
+            paciente.setProgresoTotal(progresoTotal);
+        }
+        if (ejerciciosCompletados != null) {
+            paciente.setEjerciciosCompletados(ejerciciosCompletados);
+        }
+        if (diasConsecutivos != null) {
+            paciente.setDiasConsecutivos(diasConsecutivos);
+        }
 
         return buildCompletePacienteDto(pacientesRepository.save(paciente));
     }

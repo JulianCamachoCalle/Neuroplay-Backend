@@ -29,5 +29,7 @@ public interface PacientesService {
     void deletePacientesById(Integer id);
 
     // UPDATE PROGRESO PACIENTE
-    PacientesDto updateProgresoPaciente(Integer id, BigDecimal nuevoProgreso);
+    PacientesDto updateProgresoPaciente(Integer id, BigDecimal progresoTotal,
+                                        Integer ejerciciosCompletados,
+                                        Integer diasConsecutivos);
 }
