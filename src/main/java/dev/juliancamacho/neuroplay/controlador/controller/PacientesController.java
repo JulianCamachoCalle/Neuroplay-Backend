@@ -57,8 +57,10 @@ public class PacientesController {
     // UPDATE PROGRESO
     @PatchMapping("/{id}/progreso")
     public PacientesDto updateProgreso(@PathVariable Integer id,
-                                       @RequestParam BigDecimal progreso) {
-        return pacientesService.updateProgresoPaciente(id, progreso);
+                                       @RequestParam(required = false) BigDecimal progresoTotal,
+                                       @RequestParam(required = false) Integer ejerciciosCompletados,
+                                       @RequestParam(required = false) Integer diasConsecutivos) {
+        return pacientesService.updateProgresoPaciente(id, progresoTotal, ejerciciosCompletados, diasConsecutivos);
     }
 
     // DELETE

@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,5 +95,41 @@ public class ProgresoServiceImpl implements ProgresoService {
                 .orElse(null));
 
         return stats;
+    }
+
+    @Override
+    public ProgresoDto registrarProgresoTerapia(Integer pacienteId, BigDecimal detalle, String notas) {
+        Pacientes paciente = pacienteRepository.findById(pacienteId)
+                .orElseThrow(() -> new EntityNotFoundException("Paciente no encontrado"));
+
+        ProgresoDto progresoDto = new ProgresoDto();
+        progresoDto.setPacienteId(pacienteId);
+        progresoDto.setPacienteNombre(paciente.getUsuario().getNombre() + " " + paciente.getUsuario().getApellido());
+        progresoDto.setFecha(new Date());
+        progresoDto.setDetalle(detalle); // Usamos el campo detalle para el porcentaje de progreso
+        progresoDto.setNotas(notas);
+
+        Progreso progresoEntity = progresoMapper.progresoDtoToProgreso(progresoDto);
+        progresoEntity.setPaciente(paciente);
+        Progreso savedProgreso = progresoRepository.save(progresoEntity);
+
+        return progresoMapper.progresoToProgresoDto(savedProgreso);
+    }
+
+    @Override
+    public ProgresoDto registrarSesionCompletada(Integer pacienteId) {
+        return this.registrarProgresoTerapia(pacienteId, new BigDecimal(100), "Sesión completada");
+    }
+
+    @Override
+    public List<ProgresoDto> getProgresoByTerapia(Integer pacienteId) {
+        return progresoRepository.findByPacienteIdOrderByFechaDesc(pacienteId).stream()
+                .map(progreso -> {
+                    ProgresoDto dto = progresoMapper.progresoToProgresoDto(progreso);
+                    dto.setPacienteNombre(progreso.getPaciente().getUsuario().getNombre() + " " +
+                            progreso.getPaciente().getUsuario().getApellido());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }
