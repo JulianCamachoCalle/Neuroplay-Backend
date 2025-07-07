@@ -19,6 +19,7 @@ import java.util.Random;
 
 @RestController
 @RequestMapping("/forgotPassword")
+@CrossOrigin(origins = {"http://localhost:4200"})
 @RequiredArgsConstructor
 public class ForgotPasswordController {
 

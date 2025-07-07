@@ -45,6 +45,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .requestMatchers("/auth/register").permitAll()
                                 .requestMatchers("/api/v1/**").permitAll()
                                 .requestMatchers("/forgotPassword/**").permitAll()
+                                .requestMatchers("/admin/enviarEmail").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->

@@ -5,7 +5,6 @@ import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.MultiPartEmail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 
@@ -15,15 +14,16 @@ public class EmailSenderUtil {
     @Value("${spring.mail.username}")
     private String username;
 
-    @Value("${spring.mail.password}")
+    @Value("${spring.mail.password}}")
     private String password;
 
-    public String sendEmail(EmailDto emailDto, MultipartFile file) {
+    public String sendEmail(EmailDto emailDto) {
         try {
             MultiPartEmail email = new MultiPartEmail();
             email.setHostName("smtp.gmail.com");
             email.setSmtpPort(587);
             email.setAuthenticator(new DefaultAuthenticator(username, password));
+            email.setSSLOnConnect(true);
             email.setStartTLSEnabled(true);
             email.setFrom(username);
             email.setSubject(emailDto.getSubject());
@@ -31,15 +31,15 @@ public class EmailSenderUtil {
             email.addTo(emailDto.getReceiver());
 
             // Adjuntar archivo si existe
-            if (file != null && !file.isEmpty()) {
-                File tempFile = File.createTempFile("temp", file.getOriginalFilename());
-                file.transferTo(tempFile);
+            if (emailDto.getFile() != null && !emailDto.getFile().isEmpty()) {
+                File tempFile = File.createTempFile("temp", emailDto.getFile().getOriginalFilename());
+                emailDto.getFile().transferTo(tempFile);
 
                 EmailAttachment attachment = new EmailAttachment();
                 attachment.setPath(tempFile.getAbsolutePath());
                 attachment.setDisposition(EmailAttachment.ATTACHMENT);
                 attachment.setDescription("Archivo adjunto");
-                attachment.setName(file.getOriginalFilename());
+                attachment.setName(emailDto.getFile().getOriginalFilename());
                 email.attach(attachment);
 
                 tempFile.deleteOnExit();

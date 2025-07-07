@@ -1,8 +1,8 @@
 package dev.juliancamacho.neuroplay.controlador.email;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/admin/enviarEmail")
@@ -12,9 +12,8 @@ public class EmailController
 {
     private final EmailSenderUtil emailSenderUtil;
 
-    @PostMapping
-    public String sendEmailMessage(@RequestBody EmailDto emailDto,
-                                   @RequestParam(value = "archivo", required = false) MultipartFile file) {
-        return emailSenderUtil.sendEmail(emailDto, file);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String sendEmailMessage(@RequestBody EmailDto emailDto) {
+        return emailSenderUtil.sendEmail(emailDto);
     }
 }
